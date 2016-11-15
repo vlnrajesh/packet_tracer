@@ -1,0 +1,237 @@
+Cable Connections:
+    PC1  to  S1       :   fastEthernet0     <-> fastEthernet0/2
+    PC2  to  S2       :   fastEthernet0     <-> fastEthernet0/2
+    PC3  to  S3       :   fastEthernet0     <-> fastEthernet0/2
+    PC4  to  S4       :   fastEthernet0     <-> fastEthernet0/2
+    PC5  to  S5       :   fastEthernet0     <-> fastEthernet0/2
+    
+    S1 to  S6       :   fastEthernet0/1   <-> fastEthernet0/1 
+    S2 to  S6       :   fastEthernet0/1   <-> fastEthernet0/2
+    S6 to  S7       :   fastEthernet0/3   <-> fastEthernet0/1
+    S2 to  S7       :   fastEthernet0/1   <-> fastEthernet0/2
+    S7 to  S8       :   fastEthernet0/3   <-> fastEthernet0/1
+    S4 to  S8       :   fastEthernet0/1   <-> fastEthernet0/2
+    S5 to  S8       :   fastEthernet0/1   <-> fastEthernet0/3
+Ip allocations:
+    PC1 - 10.10.40.3/24 GW:10.10.40.1
+    PC2 - 10.10.10.2/24 GW: 10.10.10.1
+    PC3 - 10.10.20.2/24 GW: 10.10.20.1
+    PC4 - 10.10.30.4/24 GW: 10.10.30.1
+    PC5 - 10.10.40.4/24 GW: 10.10.40.2
+    S6VLAN1     - 192.168.1.1./24
+    S1VLAN1     - 192.168.1.2/24
+    S2VLAN1     - 192.168.1.3/24
+    S6VLAN10    - 192.168.10.1/24
+    S4VLAN10    - 192.168.10.2/24
+    S3VLAN30    - 192.168.30.2/24
+    S5VLAN30    - 192.168.30.3/24
+    S6VLAN40    - 192.168.40.1/24
+    
+    S6VLAN1   - 192.168.1.1/24
+    S2VLAN1   - 192.168.1.3/24
+    S7VLAN1   - 192.168.1.4/24
+    S4VLAN10  - 192.168.10.2/24
+    S6VLAN10  - 192.168.10.1/24
+    S7VLAN10  - 192.168.10.2/24
+    S8VLAN10  - 192.168.10.5/24
+    S3VLAN30  - 192.168.30.3/24
+    S7VLAN20  - 192.168.20.1/24
+    S8VLAN20  - 192.168.20.2/24
+    S8VLAN30  - 192.168.30.4/24
+    S6VLAN40  - 192.168.40.1/24
+    S8VLAN40  - 192.168.40.2/24
+######
+#S1
+######
+
+#VLAN Routing
+    enable
+    configure terminal
+    vlan 40
+    name S1VLAN40
+    int fastEthernet 0/2
+    switchport mode access
+    switchport access vlan 40
+    int fastEthernet 0/1
+    switchport mode trunk
+    switchport trunk allowed vlan 1,40
+    int vlan 1
+    ip address 192.168.1.2 255.255.255.0
+    no shutdown
+    exit
+    ip default-gateway 192.168.1.1
+    exit
+#Write changes
+    wr
+######
+#S2
+######
+
+#VLAN Routing
+    enable
+    configure terminal
+    vlan 10
+    name S2VLAN10
+    int fastEthernet 0/2
+    switchport mode access
+    switchport access vlan 10
+    int fastEthernet 0/1
+    switchport mode trunk
+    switchport trunk allowed vlan 1,10
+    int vlan 1
+    ip address 192.168.1.3 255.255.255.0
+    no shutdown
+    exit
+    ip default-gateway 192.168.1.1
+    exit
+#Write changes
+    wr
+#######
+#S3
+#######
+#VLAN Routing
+    enable
+    configure terminal
+    vlan 20
+    name S3VLAN20
+    vlan 30
+    name S3VLAN30
+    int fastEthernet 0/2
+    switchport mode access
+    switchport access vlan 20
+    int fastEthernet 0/1
+    switchport mode trunk
+    switchport trunk allowed vlan 1,20,30
+    int vlan 30
+    ip address 10.10.30.3 255.255.255.0
+    no shutdown
+    exit
+    ip default-gateway 192.168.10.1
+    exit
+#Write changes
+    wr
+#####
+#S4
+#####
+#VLAN Routing
+    enable
+    configure terminal
+    vlan 10
+    name S4VLAN10
+    vlan 30
+    name S4VLAN30
+    int fastEthernet 0/1
+    switchport mode trunk
+    switchport trunk allowed vlan 1,10,30
+    int fastEthernet 0/2
+    switchport mode access
+    switchport access vlan30
+    int vlan 10
+    ip address 10.10.10.2 255.255.255.0
+    no shutdown
+    exit
+    ip default-gateway 192.168.20.1
+    exit
+#Write changes
+    wr
+#######
+#S5
+#######
+#VLAN Routing
+    enable
+    configure terminal
+    vlan 30
+    name S5VLAN30
+    vlan 40
+    name S5VLAN40
+    int fastEthernet 0/1
+    switchport mode trunk
+    switchport trunk allowed vlan 1,30,40
+    int fastEthernet 0/2
+    switchport mode access
+    switchport access vlan40
+    int vlan 30
+    ip address 192.168.30.3 255.255.255.0
+    exit
+    ip default-gateway 192.168.20.1
+#######
+#S6
+#######
+#VLAN Routing
+    enable
+    configure terminal
+    vlan 10
+    name VLAN10
+    vlan 40
+    name VLAN40
+    int fastEthernet 0/1
+    switchport mode trunk
+    switchport trunk allowed vlan 1,40
+    int fastEthernet 0/2
+    switchport mode trunk
+    switchport trunk allowed vlan 1,10
+    int fastEthernet 0/3
+    switchport mode trunk
+    switchport trunk allowed vlan 1,10,40
+    int vlan 1
+    ip address 192.168.1.1 255.255.255.0
+    int vlan 10
+    ip address 192.168.10.1 255.255.255.0
+    int vlan 40
+    ip address 192.168.40.1 255.255.255.0
+    exit
+    ip default-gateway 192.168.10.1
+########
+#S7
+########
+#VLAN Routing
+    enable
+    configure terminal
+    vlan 10
+    name VLAN10
+    vlan 20
+    name VLAN20
+    vlan 30
+    name VLAN30
+    int fastEthernet 0/1
+    switchport mode access
+    switchport access vlan 1
+    int fastEthernet 0/2
+    switchport mode trunk
+    switchport access vlan 20,30
+    int fastEthernet 0/3
+    switchport mode trunk
+    switchport access vlan 1,10,20,30
+    int vlan 10
+    ip address 192.168.10.1 255.255.255.0
+    int vlan 20
+    ip address 192.168.20.1 255.255.255.0
+    exit
+    ip default-gateway 192.168.20.2 255.255.255.0
+#####
+#S8
+#####
+#VLAN Routing
+    enable
+    configure terminal
+    vlan 10
+    name VLAN10
+    vlan 20
+    name VLAN20
+    vlan 30
+    name VLAN30
+    vlan 40
+    name VLAN40
+    int fastEthernet 0/1
+    switchport mode trunk
+    switchport access vlan 10,20,30,40
+    int fastEthernet 0/2
+    switchport mode trunk
+    switchport access vlan 10
+    int fastEthernet 0/3
+    switchport mode trunk
+    switchport access vlan 30
+    int vlan 10
+    ip address 192.168.
+
+    

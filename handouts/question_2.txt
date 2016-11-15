@@ -1,0 +1,144 @@
+Cable Connections:
+    PC1 to L2S1    : fastEthernet0      <-> fastEthernet0/2
+    PC2 to L2S1    : fastEthernet0      <-> fastEthernet0/3
+    PC3 to L2S2    : fastEthernet0      <-> fastEthernet0/2
+    PC4 to L2S2    : fastEthernet0      <-> fastEthernet0/3
+    L2S2 to L3S1   : fastEthernet0/1    <-> fastEthernet0/1
+    L2S3 to L3S1   : fastEthernet0/1    <-> fastEthernet0/2
+Ip allocations:
+    PC1 - 192.168.10.2/24 GW:192.168.10.1
+    PC2 - 192.168.20.2/24 GW: 192.168.20.1
+    PC3 - 192.168.10.3/24 GW: 192.168.10.1
+    PC4 - 192.168.30.2/24 GW: 192.168.30.1
+    L2VLAN1- 10.10.1.1/8
+    L2VLAN1 - 10.10.1.2/8
+    L3VLAN1 - 10.10.1.3/8
+    L3VLAN10 - 192.168.10.1/24
+    L3VLAN20 - 192.168.20.1/24
+    L3VLAN30 - 192.168.30.1/24
+
+##########
+L2S1
+##########
+    enable
+    configure terminal
+    host L2S1
+#Setting password for console
+    line con 0
+    password iiit123
+    login
+    line vty 0 4
+    password iiit123
+    login
+    enable secret iiit123
+    end
+    exit
+#VLAN Routing
+    enable
+    configure terminal
+    vlan 10
+    name VLAN10
+    vlan 20
+    name VLAN20
+    int fastEthernet 0/1
+    switchport mode trunk
+    switchport trunk allowed vlan 1,10,20
+    no shutdown
+    int fastEthernet 0/2
+    switchport mode access
+    switchport access vlan 10
+    int fastEthernet 0/3
+    switchport mode access
+    switchport access vlan 20
+    int vlan 1
+    ip address 10.10.1.1 255.0.0.0
+    no shutdown
+    exit
+    ip default-gateway 10.10.1.3
+    exit
+#Write changes
+    wr
+##########
+L2S2
+##########
+    enable
+    configure terminal
+    host L2S2
+#Setting password for console
+    line con 0
+    password iiit123
+    login
+    line vty 0 4
+    password iiit123
+    login
+    enable secret iiit123
+    end
+    exit
+#VLAN Routing
+    enable
+    configure terminal
+    vlan 10
+    name VLAN10
+    vlan 30
+    name VLAN30
+    int fastEthernet 0/1
+    switchport mode trunk
+    switchport trunk allowed vlan 1,10,30
+    no shutdown
+    int fastEthernet 0/2
+    switchport mode access
+    switchport access vlan 10
+    no shutdown
+    int fastEthernet 0/3
+    switchport mode access
+    switchport access vlan 30
+    no shutdown
+    int vlan 1
+    ip address 10.10.1.2 255.0.0.0
+    no shutdown
+    exit
+    ip default-gateway 10.10.1.3
+    exit
+#Write changes
+    wr
+############
+L3S1
+############
+    enable
+    configure terminal
+    host L3S1
+#Setting password for console
+    line con 0
+    password iiit123
+    login
+    line vty 0 4
+    password iiit123
+    login
+    enable secret iiit123
+    end
+    exit
+#VLAN routing
+    enable
+    configure terminal
+    vlan 10
+    name VLAN10
+    vlan 20
+    name VLAN20
+    vlan 30
+    name VLAN30
+    int range fastEthernet 0/1 -2
+    switchport trunk encapsulation dot1q
+    int vlan 1
+    ip address 10.10.1.3 255.0.0.0
+    no shutdown
+    int vlan 10
+    ip address 192.168.10.1 255.255.255.0
+    int vlan 20
+    ip address 192.168.20.1 255.255.255.0
+    int vlan 30
+    ip address 192.168.30.1 255.255.255.0
+    exit
+    ip routing
+    exit
+#Write changes
+    wr

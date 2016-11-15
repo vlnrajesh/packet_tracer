@@ -1,0 +1,94 @@
+Cable Connections:
+    PC1 to L2S1    : fastEthernet0      <-> fastEthernet0/2
+    PC2 to L2S1    : fastEthernet0      <-> fastEthernet0/3
+    PC3 to L2S2    : fastEthernet0      <-> fastEthernet0/2
+    PC4 to L2S2    : fastEthernet0      <-> fastEthernet0/3
+    L2S1 to L2S2   : fastEthernet0/1    <-> fastEthernet0/1
+IP allocations:
+    PC1 - 10.10.10.2/24
+    PC2 - 10.10.20.2/24
+    PC3 - 10.10.10.3/24
+    PC4 - 10.10.20.4/24
+    L2S1-VLAN1 - 10.10.1.1/24
+    L2S2-VLAN2 - 10.10.1.2/24
+
+#################
+#Switch - 1
+#################
+#Enable Terminal and Set switchname
+    enable
+    configure terminal
+    host L2SWITCH1
+#Setting password for console
+    line con 0
+    password iiit123
+    login
+    line vty 0 4
+    password iiit123
+    login
+    enable secret iiit123
+    end
+    exit
+#VLAN Routing
+    enable
+    configure terminal
+    vlan 10
+    name VLAN10
+    vlan 20
+    name VLAN20
+    interface fastEthernet 0/1
+    switchport mode trunk
+    interface vlan 1
+    ipaddress 10.10.1.1 255.255.255.0
+    no shutdown
+    interface fastEthernet 0/2
+    switchport mode access
+    switchport access vlan 10
+    interface fastEthernet 0/3
+    switchport mode access
+    switchport access vlan 20
+    exit
+#Write configurations in Global mode    
+wr
+###################
+#Switch - 2
+###################
+#Enable Terminal and Set switchname
+    enable
+    configure terminal
+    host L2SWITCH2
+#Setting password for console
+    line con 0
+    password iiit123
+    login
+    line vty 0 4
+    password iiit123
+    login
+    enable secret iiit123
+    end
+    exit
+#VLAN Routing
+    enable
+    configure terminal
+    vlan 10
+    name VLAN10
+    vlan 20
+    name VLAN20
+    interface fastEthernet 0/1
+    switchport mode trunk
+    interface vlan 1
+    ipaddress 10.10.1.2 255.255.255.0
+    no shutdown
+    interface fastEthernet 0/2
+    switchport mode access
+    switchport access vlan 10
+    interface fastEthernet 0/3
+    switchport mode access
+    switchport access vlan 20
+    exit
+#Write configurations in Global mode    
+wr
+
+    
+
+    

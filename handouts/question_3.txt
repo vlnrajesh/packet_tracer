@@ -1,0 +1,187 @@
+Cable Connections:
+    PC1  to  L2S1       :   fastEthernet0     <-> fastEthernet0/2
+    PC2  to  L2S2       :   fastEthernet0     <-> fastEthernet0/2
+    PC3  to  L2S3       :   fastEthernet0     <-> fastEthernet0/2
+    PC4  to  L2S4       :   fastEthernet0     <-> fastEthernet0/2
+    PC5  to  L2S5       :   fastEthernet0     <-> fastEthernet0/2
+    L2S1 to  L3S1       :   fastEthernet0/1   <-> fastEthernet0/1 
+    L2S2 to  L3S1       :   fastEthernet0/1   <-> fastEthernet0/2
+    L3S1 to  L3S2       :   fastEthernet0/3   <-> fastEthernet0/1
+    L2S3 to  L3S2       :   fastEthernet0/1   <-> fastEthernet0/2
+    L3S2 to  L3S3       :   fastEthernet0/3   <-> fastEthernet0/1
+    L2S4 to  L3S3       :   fastEthernet0/1   <-> fastEthernet0/2
+    L2S5 to  L3S3       :   fastEthernet0/1   <-> fastEthernet0/3
+Ip allocations:
+    PC1         - 172.16.10.3/16 GW:172.16.10.1
+    PC2         - 172.16.20.2/16 GW: 172.16.20.1
+    PC3         - 172.16.30.3/16 GW: 172.16.30.1
+    PC4         - 172.16.10.4/16 GW: 172.16.10.1
+    PC5         - 172.16.40.2/16 GW: 172.16.40.1
+    L3S1VLAN10  - 172.16.10.2/16
+    L3S3VLAN10  - 172.16.10.1/16
+    L3S1VLAN20  - 172.16.20.1/16
+    L3S2VLAN30  - 172.16.30.1/16
+    L3S3VLAN30  - 172.16.30.2/16
+    L3S2VLAN1   - 10.10.1.1/24
+    L2S1VLAN1   - 10.10.1.1/24
+    L2S2VLAN1   - 10.10.1.2/24
+########
+#L2S1
+########
+    enable
+    configure terminal
+    host L2S1
+#Setting password for console
+    line con 0
+    password iiit123
+    login
+    line vty 0 4
+    password iiit123
+    login
+    enable secret iiit123
+    end
+    exit
+#Configure VLAN routing
+    enable
+    configure terminal
+    vlan 10
+    name VLAN
+    interface fastEthernet 0/1
+    switchport mode trunk
+    no shutdown
+    interface fastEthernet 0/2
+    switchport mode access
+    switchport access vlan10
+    int vlan 1
+    ip address 10.10.1.1 255.255.255.0
+    no shutdown
+    exit
+#Write changes to disk
+    wr
+    
+#######
+#L2S2
+#######
+    enable
+    configure terminal
+    host L2S2
+#Setting password for console
+    line con 0
+    password iiit123
+    login
+    line vty 0 4
+    password iiit123
+    login
+    enable secret iiit123
+    end
+    exit
+#Con
+    enable
+    configure terminal
+    vlan 20
+    name VLAN20
+    interface fastEthernet 0/1
+    switchport mode trunk
+    no shutdown
+    interface fastEthernet 0/2
+    switchport mode access
+    switchport access vlan20
+    int vlan1
+    ip address 10.10.1.2 255.255.255.0
+    exit
+#
+
+######
+#L2S3
+######
+#Setting password for console
+    line con 0
+    password iiit123
+    login
+    line vty 0 4
+    password iiit123
+    login
+    enable secret iiit123
+    end
+    exit
+#######
+#L2S4
+#######
+#Setting password for console
+    line con 0
+    password iiit123
+    login
+    line vty 0 4
+    password iiit123
+    login
+    enable secret iiit123
+    end
+    exit
+#######
+#L2S5
+#######
+#Setting password for console
+    line con 0
+    password iiit123
+    login
+    line vty 0 4
+    password iiit123
+    login
+    enable secret iiit123
+    end
+    exit
+######
+#L3S1
+######
+    enable
+    configure terminal
+    host L3S1
+#Setting password for console
+    line con 0
+    password iiit123
+    login
+    line vty 0 4
+    password iiit123
+    login
+    enable secret iiit123
+    end
+    exit
+#C
+    enable
+    configure terminal
+    interface range fastEthernet 0/2-3
+    switchport mode access
+    switchport mode trunk
+    switchport trunk encapsulation dot1q
+    no shut
+    exit
+    interface fastEthernet 0/1
+    no switchport
+    ip address 
+    
+######
+#L3S2
+######
+#Setting password for console
+    line con 0
+    password iiit123
+    login
+    line vty 0 4
+    password iiit123
+    login
+    enable secret iiit123
+    end
+    exit
+#######
+#L3S3
+#######
+#Setting password for console
+    line con 0
+    password iiit123
+    login
+    line vty 0 4
+    password iiit123
+    login
+    enable secret iiit123
+    end
+    exit
